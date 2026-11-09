@@ -125,7 +125,7 @@ Click the video to type. ⌃⌘S shows or hides the sidebar. Default shortcuts
 ⌥⌘1–4 open Home, the app switcher, notifications, and Control Center;
 ⌥⌘0 pauses or resumes control; ⌥⌘5 saves a screenshot; ⌥⌘6 starts or stops recording.
 Options and the save folder are available in the sidebar. The current app
-interface and detailed supporting documentation are in Italian.
+interface and detailed setup and architecture guides are in Italian.
 
 Video is captured independently of QuickTime. A capture session without frames
 is not reported as working video. QuickTime or other apps may occupy the source;
@@ -139,13 +139,13 @@ SIP changes, or security bypasses are used.
 
 Setup uses your own Apple Account. Do not share provisioning profiles,
 certificates, personal screenshots, or passcodes in issues. The WDA runner is a
-development tool: read [SECURITY.md](SECURITY.md) (Italian) before using it.
+development tool: read [SECURITY.md](SECURITY.md) before using it.
 
 ## Contributing and distribution
 
-The following supporting documents are currently in Italian:
+Supporting documents (Italian unless otherwise noted):
 
-- [CONTRIBUTING.md](CONTRIBUTING.md): development and contributions.
+- [CONTRIBUTING.md](CONTRIBUTING.md): development and contributions (English).
 - [CHANGELOG.md](CHANGELOG.md): features in the initial public preview.
 - [Docs/PUBLISHING.md](Docs/PUBLISHING.md): repository preparation and source archives.
 - [Docs/TECHNICAL-ANALYSIS.md](Docs/TECHNICAL-ANALYSIS.md): architecture and dependencies.

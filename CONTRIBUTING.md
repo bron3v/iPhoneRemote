@@ -1,39 +1,44 @@
-# Contribuire
+# Contributing
 
-Il progetto è un’anteprima per sviluppo locale. Prima di proporre modifiche, leggi
-README.md, SECURITY.md e Docs/TECHNICAL-ANALYSIS.md.
+**English** · [Italiano](CONTRIBUTING.it.md)
 
-## Ambiente
+This project is a local development preview. Before proposing changes, read
+[README.md](README.md), [SECURITY.md](SECURITY.md), and
+[Docs/TECHNICAL-ANALYSIS.md](Docs/TECHNICAL-ANALYSIS.md) (Italian).
 
-Serve un Mac con Xcode completo, Git e Python 3. Il target Mac non ha dipendenze
-Swift Package esterne. Per i soli test simulati non servono iPhone né Apple Account.
-WDA viene scaricato separatamente da `Scripts/bootstrap-wda.sh` al commit fissato.
+## Development environment
+
+You need a Mac with the full Xcode installation, Git, and Python 3. The Mac target
+has no external Swift Package dependencies. Simulated tests do not require an
+iPhone or Apple Account. WDA is downloaded separately at a pinned commit by
+`Scripts/bootstrap-wda.sh`.
 
 ```sh
 Scripts/verify.sh
 python3 -m unittest discover -s Tests/Publication -v
 ```
 
-Su un Mac con sessione desktop puoi inoltre eseguire `Scripts/verify-experience.sh`.
-Le prove hardware sono distinte: descrivi modello, versioni e comportamento
-osservato senza pubblicare identificativi o contenuti personali.
+On a Mac with a desktop session, you can also run `Scripts/verify-experience.sh`.
+Hardware tests are separate: describe the device model, software versions, and
+observed behavior without publishing identifiers or personal content.
 
-## Modifiche
+## Changes
 
-- Mantieni il Mac su API pubbliche; dichiara esplicitamente la dipendenza privata XCTest di WDA.
-- Non aggiungere disabilitazione SIP, aggiramenti di codici o false conferme di successo.
-- Evita replay automatici di azioni dal risultato incerto e mantieni i limiti della coda.
-- I test per testo/chat devono usare risposte simulate; non inviare messaggi reali a terzi.
-- Aggiungi verifiche utili per modifiche di comportamento, distinguendole dai test hardware.
-- Se aggiungi file Swift, esegui `python3 Scripts/generate-project.py` e includi il progetto aggiornato.
-- Se aggiorni WDA, verifica il commit, le API usate, il provisioning e le licenze di tutti i file interessati.
-- Non aggiungere runner compilati, profili, schermate personali o configurazioni locali.
+- Keep the Mac app on public APIs; explicitly disclose WDA's private XCTest dependency.
+- Do not add SIP disabling, passcode bypasses, or false success reports.
+- Avoid automatically replaying actions with uncertain outcomes and preserve queue limits.
+- Text and chat tests must use simulated responses; do not send real messages to third parties.
+- Add useful checks for behavior changes and distinguish them from hardware tests.
+- If you add Swift files, run `python3 Scripts/generate-project.py` and include the updated project.
+- If you update WDA, review the commit, APIs used, provisioning, and licenses of all affected files.
+- Do not add compiled runners, provisioning profiles, personal screenshots, or local configuration.
 
-Per una pull request descrivi problema, risultato, verifiche eseguite e limiti.
-Non presentare come collaudata una configurazione che hai soltanto compilato.
+For a pull request, describe the problem, resulting behavior, checks performed,
+and limitations. Do not claim a configuration has been tested on hardware when
+you have only built it.
 
-## Licenza dei contributi
+## Contribution licensing
 
-I contributi originali vengono proposti sotto la licenza MIT del progetto.
-Indica provenienza e licenza di qualsiasi materiale esterno; non ricopiare codice
-senza diritti o attribuzioni. Le dipendenze mantengono le loro condizioni.
+Original contributions are submitted under the project's MIT license.
+Identify the source and license of any external material; do not copy code
+without the necessary rights or attribution. Dependencies retain their own terms.

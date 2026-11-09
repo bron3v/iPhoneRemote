@@ -135,11 +135,11 @@ fisicamente. Nessun jailbreak, modifica a SIP o aggiramento delle protezioni.
 
 La configurazione usa il proprio Apple Account; non condividere profili,
 certificati, schermate personali o codici nelle issue. Il runner WDA è uno
-strumento di sviluppo: leggi [SECURITY.md](SECURITY.md) prima di usarlo.
+strumento di sviluppo: leggi [SECURITY.it.md](SECURITY.it.md) prima di usarlo.
 
 ## Contribuire e distribuire
 
-- [CONTRIBUTING.md](CONTRIBUTING.md): sviluppo e contributi.
+- [CONTRIBUTING.it.md](CONTRIBUTING.it.md): sviluppo e contributi.
 - [CHANGELOG.md](CHANGELOG.md): funzioni della prima anteprima pubblicabile.
 - [Docs/PUBLISHING.md](Docs/PUBLISHING.md): preparazione repository e archivio sorgenti.
 - [Docs/TECHNICAL-ANALYSIS.md](Docs/TECHNICAL-ANALYSIS.md): architettura e dipendenze.

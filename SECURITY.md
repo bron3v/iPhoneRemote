@@ -1,46 +1,48 @@
-# Sicurezza e trattamento locale dei dati
+# Security and local data handling
 
-## Modello di fiducia
+**English** · [Italiano](SECURITY.it.md)
 
-Questa app richiede un iPhone di cui hai il controllo, il suo sblocco e le
-approvazioni previste da iOS. WDA è un runner di sviluppo che utilizza API private
-XCTest; non aggira Developer Mode, fiducia, provisioning o autenticazione.
-La guida del tastierino è solo un disegno manuale: non rivela i tasti protetti,
-non verifica un codice e non certifica l’allineamento.
+## Trust model
 
-Il client Mac e il tunnel iproxy usano `127.0.0.1:8100` e selezionano USB/UDID
-esplicitamente. Questo limita il listener sul Mac, **non garantisce da solo che
-il server WDA sul telefono sia limitato al loopback**. Il runner conserva il
-comportamento upstream e può ascoltare sulle interfacce del dispositivo.
-Non esporre WDA con port forwarding o usarlo come servizio remoto pubblico.
-Non è un servizio di controllo autenticato per reti non fidate.
+This app requires an iPhone you control, the ability to unlock it, and the
+approvals required by iOS. WDA is a development runner that uses private XCTest
+APIs; it does not bypass Developer Mode, trust, provisioning, or authentication.
+The keypad guide is only a manual visual reference: it does not reveal protected
+keys, verify a passcode, or guarantee alignment.
 
-Non vengono aggiunti daemon, login item o modifiche globali a xcode-select.
-L’app termina i processi che avvia, non quelli di altri strumenti. Se il processo
-Mac viene terminato forzatamente, può essere necessario chiudere helper rimasti
-attivi. La chiusura normale finalizza le registrazioni e arresta gli helper propri.
+The Mac client and iproxy tunnel use `127.0.0.1:8100` and explicitly select
+USB/UDID. This restricts the listener on the Mac; **it does not by itself guarantee
+that the WDA server on the phone is restricted to loopback**. The runner retains
+upstream behavior and may listen on the device's network interfaces.
+Do not expose WDA through port forwarding or use it as a public remote service.
+It is not an authenticated control service for untrusted networks.
 
-## Dati
+The app adds no daemons, login items, or global changes to `xcode-select`.
+It terminates processes it starts, not those owned by other tools. If the Mac
+process is force-terminated, you may need to stop remaining helpers manually.
+Normal shutdown finalizes recordings and stops the app's own helpers.
 
-- Video e comandi passano localmente; non c’è telemetria o backend applicativo.
-- Screenshot e video vengono salvati solo su richiesta, nella cartella scelta.
-- Il testo non confermato resta in memoria e può essere copiato esplicitamente.
-- Il pacchetto personale contiene identificativo del dispositivo, Team e profilo;
-  non è l’archivio sorgenti da condividere.
-- Firma e rinnovo possono contattare Apple; il bootstrap scarica WDA da GitHub.
-- I log Xcode e le diagnostiche possono contenere identità, UDID, percorsi o
-  altri dati personali. Non allegarli integralmente alle issue.
+## Data
 
-## Segnalare problemi
+- Video and commands stay local; there is no telemetry or application backend.
+- Screenshots and recordings are saved only on request, in the selected folder.
+- Unconfirmed text remains in memory and can be copied explicitly.
+- The personal app package contains a device identifier, Team, and provisioning
+  profile; it is not the source archive intended for sharing.
+- Signing and renewal may contact Apple; the bootstrap downloads WDA from GitHub.
+- Xcode logs and diagnostics may contain identities, UDIDs, paths, or other
+  personal data. Do not attach them to issues in full.
 
-Non pubblicare chiavi, token, profili, Apple Account, codici o contenuto del
-telefono in un’issue. Se il repository abilita la segnalazione privata di
-vulnerabilità di GitHub, usa quel canale. Se non è disponibile, apri una richiesta
-neutra per concordare un canale privato, senza dettagli sfruttabili o dati sensibili.
-La segnalazione privata va abilitata dal titolare dopo la creazione del repository;
-non viene dichiarata già attiva.
+## Reporting security issues
 
-Prima di pubblicare esegui `python3 Scripts/publication_audit.py` sui file staged
-e rivedi il diff. Il controllo rileva alcuni pattern e file rischiosi, ma non
-sostituisce una revisione. Se una credenziale è stata esposta, revocala: eliminarla
-soltanto dall’ultima versione non la rimuove dalla cronologia di Git.
+Do not publish keys, tokens, provisioning profiles, Apple Account details,
+passcodes, or phone content in an issue. If GitHub private vulnerability reporting
+is enabled for this repository, use that channel. If it is unavailable, open a
+neutral request to arrange a private channel, without exploitable details or
+sensitive data. Private vulnerability reporting must be enabled by the repository
+owner after creation; this document does not claim it is already enabled.
+
+Before publishing, run `python3 Scripts/publication_audit.py` on the staged files
+and review the diff. The audit detects some risky patterns and files, but does not
+replace a review. If a credential is exposed, revoke it: deleting it only from the
+latest version does not remove it from Git history.
