@@ -1,0 +1,47 @@
+# Local build products, upstream checkouts, personal configuration, and evidence
+.build/
+build/
+DerivedData/
+Research/
+.local/
+.swiftpm/
+
+# Xcode / macOS user state
+.DS_Store
+*.xcuserstate
+xcuserdata/
+*.xccheckout
+*.xcscmblueprint
+
+# Generated assets and Python caches
+Assets/AppIcon.iconset/
+__pycache__/
+*.py[cod]
+.venv/
+
+# Local accounts, provisioning, signing, and credentials
+.env
+.env.*
+!.env.example
+*.p12
+*.pfx
+*.pem
+*.key
+*.cer
+*.mobileprovision
+*.provisionprofile
+*.xctestrun
+Setup.plist
+
+# Executables, recordings, screenshots, and diagnostic bundles
+*.app/
+*.ipa
+*.dmg
+*.pkg
+*.xcarchive/
+*.xcresult/
+*.mov
+*.mp4
+*.log
+core
+core.*
