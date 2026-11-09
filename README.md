@@ -1,74 +1,77 @@
 # iPhone Remote
 
-<img src="Assets/AppIcon-final.png" width="112" alt="Icona iPhone Remote">
+**English** · [Italiano](README.it.md)
 
-App nativa macOS in Swift e SwiftUI per vedere e controllare un iPhone collegato
-via USB. Utile anche quando il display fisico non è utilizzabile ma il telefono
-può ancora essere sbloccato e autorizzato.
+<img src="Assets/AppIcon-final.png" width="112" alt="iPhone Remote icon">
 
-**Anteprima per sviluppo locale · versione 0.5.0.** Non è un prodotto App Store,
-non aggira il codice dell’iPhone e non offre controllo remoto via Internet.
-Il video usa API pubbliche macOS; il controllo richiede il runner separato
-**WebDriverAgent (WDA), che utilizza API private XCTest**.
+A native macOS app built with Swift and SwiftUI to view and control an iPhone
+connected over USB. It can also help when the physical display is unusable,
+provided the phone can still be unlocked and authorized.
 
-## Funzioni
+**Local development preview · version 0.5.0.** This is not an App Store product,
+does not bypass the iPhone passcode, and does not provide remote control over the
+Internet. Video capture uses public macOS APIs; control requires a separate
+**WebDriverAgent (WDA) runner, which uses private XCTest APIs**.
 
-- Video USB AVFoundation, mantenimento delle proporzioni e finestra ridimensionabile.
-- Clic, swipe, rotella, pressione lunga e digitazione con composizione macOS.
-- Pillole sottili sopra orario e indicatori per notifiche e Centro di Controllo;
-  un comando centrato in basso: clic per Home, doppio clic per app aperte.
-- Invio nelle chat supportate quando viene riconosciuto un unico pulsante Invia;
-  ⇧Invio per andare a capo. La compatibilità dipende dall’app e dalla lingua.
-- Modalità compatta, primo piano, scorciatoie personalizzabili e pulsanti regolabili.
-- Screenshot PNG e registrazioni MOV H.264 locali, senza audio.
-- Riconnessione con attese crescenti, senza reinviare input dall’esito incerto.
-- Avvio del runner personale, stato del provisioning e tentativo di rinnovo via Xcode.
-- Guida numerica **indicativa e manuale** per tastierini nascosti: non rileva i tasti
-  reali, non inserisce codici e sospende il controllo remoto mentre è visibile.
+## Features
 
-## Requisiti e compatibilità
+- USB video through AVFoundation, aspect ratio preservation, and a resizable window.
+- Clicks, swipes, mouse wheel scrolling, long presses, and typing with macOS text composition.
+- Thin pills above the clock and status indicators for notifications and Control Center;
+  a bottom-center button: single click for Home, double click for the app switcher.
+- Return sends in supported chats when a unique Send button is recognized;
+  ⇧Return inserts a newline. Compatibility depends on the app and language.
+- Compact mode, always on top, customizable shortcuts, and adjustable overlay controls.
+- Local PNG screenshots and H.264 MOV recordings, without audio.
+- Reconnection with increasing delays, without replaying input whose outcome is uncertain.
+- Personal runner startup, provisioning status, and renewal attempts through Xcode.
+- A **manual, approximate** guide for hidden numeric keypads: it does not detect
+  actual keys or enter passcodes, and suspends remote control while visible.
 
-| Componente | Requisito |
+## Requirements and compatibility
+
+| Component | Requirement |
 | --- | --- |
-| Mac | Target minimo macOS 14; prova fisica eseguita su Apple Silicon, macOS 27.2 |
-| Xcode | Installazione completa compatibile con la versione iOS del dispositivo |
-| iPhone | Cavo dati USB, fiducia nel Mac, Modalità sviluppatore e automazione UI abilitate |
-| Firma WDA | Apple Account configurato in Xcode e provisioning valido per il proprio iPhone |
-| Strumenti locali | Git, Python 3 e `iproxy` da libusbmuxd |
+| Mac | Minimum deployment target: macOS 14; hardware testing on Apple Silicon, macOS 27.2 |
+| Xcode | Full installation compatible with the device's iOS version |
+| iPhone | USB data cable, trust in the Mac, Developer Mode, and UI automation enabled |
+| WDA signing | Apple Account configured in Xcode and valid provisioning for your iPhone |
+| Local tools | Git, Python 3, and `iproxy` from libusbmuxd |
 
-La prova di riferimento usa iPhone 14 Pro, iOS 27.2 e Xcode 27.2. Altri modelli,
-versioni e Mac Intel non sono dichiarati collaudati. Il target macOS 14 è una
-impostazione di build, non una prova su ogni sistema supportato.
+The reference setup uses an iPhone 14 Pro, iOS 27.2, and Xcode 27.2. Other models,
+versions, and Intel Macs have not been validated on hardware. The macOS 14 target
+is a build setting, not evidence of testing on every supported system.
 
-Il progetto non richiede abbonamenti o servizi cloud per video e controllo.
-Firma e rinnovo del runner possono contattare i servizi Apple; il Personal Team
-ha limiti e scadenze. Ogni utente prepara il proprio runner: **non distribuire la
-copia personale firmata come se fosse un’app universale**.
+Video and control require no subscriptions or cloud services. Runner signing and
+renewal may contact Apple services; Personal Teams have limitations and expiration
+dates. Each user prepares their own runner: **do not distribute your personally
+signed copy as a universal app**.
 
-## Installazione personale
+## Personal installation
 
-1. Scarica i sorgenti da questo repository e apri Terminale nella cartella.
-2. Installa Xcode, aggiungi il tuo Apple Account in **Xcode → Settings → Accounts**,
-   collega e autorizza l’iPhone. Su iPhone abilita Modalità sviluppatore e,
-   se presente, **Impostazioni → Sviluppatore → Enable UI Automation**.
-3. Installa il tunnel USB:
+1. Download the sources from this repository and open Terminal in the project folder.
+2. Install Xcode, add your Apple Account in **Xcode → Settings → Accounts**,
+   then connect and trust the iPhone. On the iPhone, enable Developer Mode and,
+   where available, **Settings → Developer → Enable UI Automation**.
+3. Install the USB tunnel tool:
 
    ```sh
    brew install libusbmuxd
    ```
 
-4. Prepara la configurazione locale, che viene esclusa da Git:
+4. Prepare your local configuration, which is excluded from Git:
 
    ```sh
    mkdir -p .local
    cp Config/Local.env.example .local/development.env
    ```
 
-   Modifica `.local/development.env` con il tuo UDID, Team ID e identificativo
-   runner univoco. Non pubblicare il file compilato. Per trovare questi valori
-   e risolvere problemi di firma leggi [la guida di installazione](Docs/PERSONAL-APP.md).
+   Edit `.local/development.env` with your UDID, Team ID, and unique runner bundle
+   identifier. Do not publish the completed file. For help finding these values
+   and resolving signing issues, see the [installation guide](Docs/PERSONAL-APP.md)
+   (Italian).
 
-5. Carica la configurazione e prepara la tua app:
+5. Load the configuration and prepare your app:
 
    ```sh
    source .local/development.env
@@ -76,27 +79,29 @@ copia personale firmata come se fosse un’app universale**.
    open '/Applications/iPhone Remote.app'
    ```
 
-Lo script scarica una revisione WDA fissata, compila il runner con il tuo Team,
-prepara una copia Mac firmata e la installa in Applicazioni. Può richiedere
-interventi in Xcode e conferme fisiche sull’iPhone. All’avvio, l’app prepara video,
-tunnel e runner. Non cambia `xcode-select` e non installa servizi di login.
+The script downloads a pinned WDA revision, builds the runner with your Team,
+prepares a signed Mac app, and installs it in Applications. You may need to
+complete steps in Xcode and confirm prompts physically on the iPhone. At launch,
+the app prepares video capture, the tunnel, and the runner. It does not change
+`xcode-select` or install login services.
 
-## Compilare solo l’app Mac
+## Build only the Mac app
 
-Non servono iPhone, account Apple o runner per compilare l’interfaccia e i test:
+You do not need an iPhone, Apple Account, or runner to build the interface and tests:
 
 ```sh
 Scripts/build-app.sh
 open 'build/mac/Build/Products/Debug/iPhone Remote.app'
 ```
 
-Oppure apri `iPhoneRemote.xcodeproj`, schema **iPhoneRemote**, destinazione **My Mac**.
-La build Debug è firmata ad hoc; senza il pacchetto personale non avvia da sola
-WDA. Per il controllo manuale vedi [la guida](Docs/PERSONAL-APP.md#avvio-manuale-per-sviluppatori).
-Per Xcode installato altrove, imposta `DEVELOPER_DIR` sulla sua cartella
-`Contents/Developer` prima di eseguire gli script.
+Alternatively, open `iPhoneRemote.xcodeproj`, select the **iPhoneRemote** scheme
+and **My Mac** destination. The Debug build is signed ad hoc; without the personal
+package it does not start WDA automatically. For manual control setup, see the
+[guide](Docs/PERSONAL-APP.md#avvio-manuale-per-sviluppatori) (Italian).
+If Xcode is installed elsewhere, set `DEVELOPER_DIR` to its `Contents/Developer`
+folder before running the scripts.
 
-## Verifiche
+## Verification
 
 ```sh
 Scripts/verify.sh
@@ -104,44 +109,47 @@ python3 -m unittest discover -s Tests/Publication -v
 Scripts/verify-experience.sh
 ```
 
-- `verify.sh`: 19 test RemoteCore, modello di input/riconnessione, build macOS e firma ad hoc.
-- Test Publication: verifica del controllo dei file destinati alla pubblicazione.
-- `verify-experience.sh`: richiede una sessione desktop Mac; usa dati sintetici
-  per input, scorciatoie, geometria, PNG e MOV. Non invia messaggi all’iPhone.
+- `verify.sh`: 19 RemoteCore tests, input/reconnection model checks, macOS build, and ad-hoc signature verification.
+- Publication tests: checks for the audit of files intended for publication.
+- `verify-experience.sh`: requires a Mac desktop session and uses synthetic data
+  for input, shortcuts, geometry, PNG, and MOV checks. It does not send messages to the iPhone.
 
-GitHub Actions esegue test, audit dei sorgenti e build Mac, senza iPhone né
-credenziali di firma. La configurazione CI va verificata sul primo push;
-non sostituisce le prove su hardware. Risultati locali e limiti:
-[Docs/VERIFICATION.md](Docs/VERIFICATION.md).
+GitHub Actions runs tests, source audits, and the Mac build without an iPhone or
+signing credentials. The first push passed these checks on GitHub; CI does not
+replace hardware testing. Local results and limitations are documented in
+[Docs/VERIFICATION.md](Docs/VERIFICATION.md) (Italian).
 
-## Uso e limiti
+## Usage and limitations
 
-Clicca sul video per digitare. ⌃⌘S mostra/nasconde la sidebar. Le scorciatoie
-predefinite ⌥⌘1–4 aprono Home, app aperte, notifiche e Centro di Controllo;
-⌥⌘0 sospende/riprende il controllo; ⌥⌘5 salva uno screenshot; ⌥⌘6 registra/ferma.
-Le opzioni e la cartella dei salvataggi sono nella sidebar.
+Click the video to type. ⌃⌘S shows or hides the sidebar. Default shortcuts
+⌥⌘1–4 open Home, the app switcher, notifications, and Control Center;
+⌥⌘0 pauses or resumes control; ⌥⌘5 saves a screenshot; ⌥⌘6 starts or stops recording.
+Options and the save folder are available in the sidebar. The current app
+interface and detailed supporting documentation are in Italian.
 
-Il video non proviene da QuickTime. Il successo di una sessione senza fotogrammi
-non viene indicato come video funzionante. QuickTime o altre app possono occupare
-la sorgente: la cattura simultanea non è garantita.
+Video is captured independently of QuickTime. A capture session without frames
+is not reported as working video. QuickTime or other apps may occupy the source;
+simultaneous capture is not guaranteed.
 
-Supporto del controllo per **un solo iPhone USB**. Lo scroll è una serie di swipe,
-non scroll nativo continuo. Audio, multitouch, uso senza Mac e collegamento diretto
-con iPad non sono implementati. Schermate protette e richieste di autenticazione
-possono nascondere tastiere o bloccare il controllo; devono essere completate
-fisicamente. Nessun jailbreak, modifica a SIP o aggiramento delle protezioni.
+Control supports **one USB-connected iPhone**. Scrolling is a sequence of swipes,
+not continuous native scrolling. Audio, multitouch, use without a Mac, and direct
+iPad connections are not implemented. Protected screens and authentication prompts
+may hide keypads or block control; they must be completed physically. No jailbreak,
+SIP changes, or security bypasses are used.
 
-La configurazione usa il proprio Apple Account; non condividere profili,
-certificati, schermate personali o codici nelle issue. Il runner WDA è uno
-strumento di sviluppo: leggi [SECURITY.md](SECURITY.md) prima di usarlo.
+Setup uses your own Apple Account. Do not share provisioning profiles,
+certificates, personal screenshots, or passcodes in issues. The WDA runner is a
+development tool: read [SECURITY.md](SECURITY.md) (Italian) before using it.
 
-## Contribuire e distribuire
+## Contributing and distribution
 
-- [CONTRIBUTING.md](CONTRIBUTING.md): sviluppo e contributi.
-- [CHANGELOG.md](CHANGELOG.md): funzioni della prima anteprima pubblicabile.
-- [Docs/PUBLISHING.md](Docs/PUBLISHING.md): preparazione repository e archivio sorgenti.
-- [Docs/TECHNICAL-ANALYSIS.md](Docs/TECHNICAL-ANALYSIS.md): architettura e dipendenze.
+The following supporting documents are currently in Italian:
 
-Codice originale sotto [licenza MIT](LICENSE). WDA e altri componenti mantengono
-le proprie condizioni: [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
-Progetto indipendente, non affiliato né approvato da Apple, Appium o Meta.
+- [CONTRIBUTING.md](CONTRIBUTING.md): development and contributions.
+- [CHANGELOG.md](CHANGELOG.md): features in the initial public preview.
+- [Docs/PUBLISHING.md](Docs/PUBLISHING.md): repository preparation and source archives.
+- [Docs/TECHNICAL-ANALYSIS.md](Docs/TECHNICAL-ANALYSIS.md): architecture and dependencies.
+
+Original code is available under the [MIT license](LICENSE). WDA and other
+components retain their own terms: [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
+This independent project is not affiliated with or endorsed by Apple, Appium, or Meta.
