@@ -89,6 +89,18 @@ Le scorciatoie sono locali all’app attiva. Per cambiarle premi il pulsante del
 combinazione; Esc annulla. Invio tenta di premere un unico pulsante Invia nelle
 chat riconosciute; ⇧Invio va a capo. Nessuna compatibilità universale è promessa.
 
+Il pulsante altoparlante nella barra apre il controllo del volume. Attiva
+**Riproduci audio USB sul Mac** per ascoltare la traccia della sorgente video
+selezionata. L’app non seleziona un microfono separato. La presenza della traccia
+non garantisce che iOS trasmetta l’audio di ogni schermata protetta.
+
+Se il display è guasto ma il touch risponde, usa VoiceOver sull’iPhone per
+esplorare il tastierino. Nella prova il video USB mostrava il rettangolo di
+selezione disegnato da iOS anche con le cifre nascoste. Ascolta la cifra prima
+di confermarla con un doppio tocco sul telefono. Il rettangolo indica il tasto
+selezionato, ma da solo non ti dice quale cifra sia. Segui i passaggi nella
+[guida VoiceOver del README](../README.it.md#voiceover-se-il-display-delliphone-è-guasto).
+
 Screenshot PNG e video MOV H.264 fino a 30 fps sono salvati inizialmente in
 `~/Movies/iPhone Remote`, senza audio né controlli sovrapposti. Il video viene
 finalizzato su stop, chiusura, interruzione della sorgente e cambio orientamento.
@@ -122,6 +134,10 @@ L’app termina solo i processi che ha avviato. Riutilizza un runner già dispon
 senza acquisirne la proprietà. Scollega impedisce il ricollegamento volontario fino
 a Collega WDA. Le richieste di autenticazione sospendono i tentativi automatici.
 Il pulsante Riprova è disponibile dopo un errore che richiede intervento.
+Per riutilizzare una sessione ancora attiva, nascondi iPhone Remote con **⌘H**
+invece di uscire e lascia l’iPhone collegato. Uscire dall’app arresta il runner
+che ha avviato; un nuovo avvio può richiedere di nuovo il codice. La richiesta
+è gestita da iOS e la sessione può comunque interrompersi.
 
 ## Avvio manuale per sviluppatori
 

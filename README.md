@@ -8,7 +8,7 @@ A native macOS app built with Swift and SwiftUI to view and control an iPhone
 connected over USB. It can also help when the physical display is unusable,
 provided the phone can still be unlocked and authorized.
 
-**Local development preview · version 0.5.0.** This is not an App Store product,
+**Local development preview · version 0.5.1.** This is not an App Store product,
 does not bypass the iPhone passcode, and does not provide remote control over the
 Internet. Video capture uses public macOS APIs; control requires a separate
 **WebDriverAgent (WDA) runner, which uses private XCTest APIs**.
@@ -22,6 +22,7 @@ Internet. Video capture uses public macOS APIs; control requires a separate
 - Return sends in supported chats when a unique Send button is recognized;
   ⇧Return inserts a newline. Compatibility depends on the app and language.
 - Compact mode, always on top, customizable shortcuts, and adjustable overlay controls.
+- Optional live USB audio on the Mac, with its own volume control in the toolbar.
 - Local PNG screenshots and H.264 MOV recordings, without audio.
 - Reconnection with increasing delays, without replaying input whose outcome is uncertain.
 - Personal runner startup, provisioning status, and renewal attempts through Xcode.
@@ -127,15 +128,39 @@ Click the video to type. ⌃⌘S shows or hides the sidebar. Default shortcuts
 Options and the save folder are available in the sidebar. The current app
 interface and detailed setup and architecture guides are in Italian.
 
+### VoiceOver for an iPhone with a broken display
+
+If the display is black but touch and Face ID still work, VoiceOver can help you
+use a keypad that iOS hides from the USB video. In the tested setup, the video
+still showed VoiceOver's **focus rectangle** around the selected key, even
+though the digit itself was hidden. VoiceOver can announce the selected digit,
+so you can confirm it without relying on an approximate overlay.
+
+1. On the iPhone, select only **VoiceOver** in **Settings → Accessibility →
+   Accessibility Shortcut**. Triple-click the side button to turn it on or off.
+2. If the iPhone sends audio to **System Capture**, click the speaker in iPhone
+   Remote, enable **Riproduci audio USB sul Mac** (Play USB audio on Mac), and
+   adjust the volume. Test VoiceOver on the Home Screen first.
+3. On the physical iPhone, swipe left or right with one finger until VoiceOver
+   announces the digit you want, then double-tap to confirm it. If you can't
+   hear the digit, don't confirm it based on the rectangle alone.
+
+The focus rectangle is drawn by iOS. Visibility and speech may vary by prompt;
+the app does not reveal hidden digits or enter the passcode. See
+[Apple's VoiceOver gesture guide](https://support.apple.com/guide/iphone/iph3e2e2281/ios).
+
+### Capture and control limits
+
 Video is captured independently of QuickTime. A capture session without frames
 is not reported as working video. QuickTime or other apps may occupy the source;
 simultaneous capture is not guaranteed.
 
 Control supports **one USB-connected iPhone**. Scrolling is a sequence of swipes,
-not continuous native scrolling. Audio, multitouch, use without a Mac, and direct
-iPad connections are not implemented. Protected screens and authentication prompts
-may hide keypads or block control; they must be completed physically. No jailbreak,
-SIP changes, or security bypasses are used.
+not continuous native scrolling. Multitouch, use without a Mac, and direct
+iPad connections are not implemented. Live audio depends on what the selected
+USB source exposes. Protected screens and authentication prompts may hide keypads
+or block control; complete them on the iPhone. No jailbreak, SIP changes, or
+security bypasses are used.
 
 Setup uses your own Apple Account. Do not share provisioning profiles,
 certificates, personal screenshots, or passcodes in issues. The WDA runner is a

@@ -23,8 +23,11 @@ final class CaptureService: NSObject, ObservableObject, AVCaptureVideoDataOutput
     @Published private(set) var fps = 0
     @Published private(set) var lastFrame: Date?
     @Published private(set) var selectedID: String?
+    @Published private(set) var audioAvailable = false
     private var desiredID: String?
     private var output: AVCaptureVideoDataOutput?
+    private var audioPreview: AVCaptureAudioPreviewOutput?
+    private var audioGain: Float = 0
     private var observers: [NSObjectProtocol] = []
     private var timer: Timer?
     private var frameCount = 0
@@ -44,6 +47,7 @@ final class CaptureService: NSObject, ObservableObject, AVCaptureVideoDataOutput
             let message = (note.userInfo?[AVCaptureSessionErrorKey] as? Error)?.localizedDescription ?? "Errore di acquisizione"
             self?.status = message
             self?.lastFrame = nil
+            self?.audioAvailable = false
             self?.captureQueue.async { self?.archive.invalidateSource() }
         })
         timer = Timer.scheduledTimer(withTimeInterval: 3, repeats: true) { [weak self] _ in self?.refresh() }
@@ -81,7 +85,7 @@ final class CaptureService: NSObject, ObservableObject, AVCaptureVideoDataOutput
                 self.archive.invalidateSource()
                 if self.session.isRunning { self.session.stopRunning() }
                 DispatchQueue.main.async {
-                    self.selectedID = nil; self.lastFrame = nil; self.fps = 0
+                    self.selectedID = nil; self.lastFrame = nil; self.fps = 0; self.audioAvailable = false
                     self.status = "Sorgente scollegata. In attesa dello stesso dispositivo…"
                 }
                 return
@@ -107,10 +111,17 @@ final class CaptureService: NSObject, ObservableObject, AVCaptureVideoDataOutput
         }
     }
     private func select(_ id: String) {
-        lastFrame = nil; frameSize = .zero; fps = 0
+        lastFrame = nil; frameSize = .zero; fps = 0; audioAvailable = false
         captureQueue.async {
             self.desiredID = id
             if let device = self.devices().first(where: { $0.uniqueID == id }) { self.configure(device) }
+        }
+    }
+    func setAudioPlayback(enabled: Bool, volume: Double) {
+        let gain = enabled && volume.isFinite ? Float(min(max(volume, 0), 1)) : 0
+        captureQueue.async {
+            self.audioGain = gain
+            self.audioPreview?.volume = gain
         }
     }
     func stop() {
@@ -119,7 +130,7 @@ final class CaptureService: NSObject, ObservableObject, AVCaptureVideoDataOutput
             self.archive.invalidateSource()
             if self.session.isRunning { self.session.stopRunning() }
             DispatchQueue.main.async {
-                self.selectedID = nil; self.lastFrame = nil; self.fps = 0; self.frameSize = .zero
+                self.selectedID = nil; self.lastFrame = nil; self.fps = 0; self.frameSize = .zero; self.audioAvailable = false
                 self.status = "Acquisizione arrestata"
             }
         }
@@ -130,6 +141,7 @@ final class CaptureService: NSObject, ObservableObject, AVCaptureVideoDataOutput
         session.beginConfiguration()
         session.inputs.forEach(session.removeInput)
         session.outputs.forEach(session.removeOutput)
+        audioPreview = nil
         do {
             let input = try AVCaptureDeviceInput(device: device)
             guard session.canAddInput(input) else { throw RemoteError.message("Sorgente non utilizzabile") }
@@ -141,17 +153,36 @@ final class CaptureService: NSObject, ObservableObject, AVCaptureVideoDataOutput
             guard session.canAddOutput(output) else { throw RemoteError.message("Output video non disponibile") }
             session.addOutput(output)
             self.output = output
+            let hasAudio = configureAudioPreview(from: input)
             session.commitConfiguration()
             frameCount = 0; firstFrame = true; lastDimensions = .zero; sampleTime = Date()
             session.startRunning()
             DispatchQueue.main.async {
                 self.selectedID = device.uniqueID
+                self.audioAvailable = hasAudio && self.session.isRunning
                 self.status = "Acquisizione avviata; attendo fotogrammi reali…"
             }
         } catch {
             session.commitConfiguration()
-            DispatchQueue.main.async { self.status = error.localizedDescription; self.selectedID = nil }
+            DispatchQueue.main.async { self.status = error.localizedDescription; self.selectedID = nil; self.audioAvailable = false }
         }
+    }
+    private func configureAudioPreview(from input: AVCaptureDeviceInput) -> Bool {
+        // Only monitor the selected USB screen stream, never a separate microphone.
+        guard input.device.hasMediaType(.muxed),
+              let port = input.ports.first(where: { $0.mediaType == .audio }) else { return false }
+        let preview = AVCaptureAudioPreviewOutput()
+        preview.volume = audioGain
+        guard session.canAddOutput(preview) else { return false }
+        session.addOutputWithNoConnections(preview)
+        let connection = AVCaptureConnection(inputPorts: [port], output: preview)
+        guard session.canAddConnection(connection) else {
+            session.removeOutput(preview)
+            return false
+        }
+        session.addConnection(connection)
+        audioPreview = preview
+        return true
     }
     func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
         lastSampleAt = Date()

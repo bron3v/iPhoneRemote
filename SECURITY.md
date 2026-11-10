@@ -26,6 +26,8 @@ Normal shutdown finalizes recordings and stops the app's own helpers.
 
 - Video and commands stay local; there is no telemetry or application backend.
 - Screenshots and recordings are saved only on request, in the selected folder.
+- Optional USB audio plays live on the Mac, is muted by default, and is not
+  saved to recordings. VoiceOver may speak digits aloud while entering a passcode.
 - Unconfirmed text remains in memory and can be copied explicitly.
 - The personal app package contains a device identifier, Team, and provisioning
   profile; it is not the source archive intended for sharing.

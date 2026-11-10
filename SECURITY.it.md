@@ -26,6 +26,9 @@ attivi. La chiusura normale finalizza le registrazioni e arresta gli helper prop
 
 - Video e comandi passano localmente; non c’è telemetria o backend applicativo.
 - Screenshot e video vengono salvati solo su richiesta, nella cartella scelta.
+- L’audio USB facoltativo è riprodotto dal vivo sul Mac, è silenziato per
+  impostazione predefinita e non entra nelle registrazioni. VoiceOver può leggere
+  le cifre ad alta voce durante l’inserimento del codice.
 - Il testo non confermato resta in memoria e può essere copiato esplicitamente.
 - Il pacchetto personale contiene identificativo del dispositivo, Team e profilo;
   non è l’archivio sorgenti da condividere.

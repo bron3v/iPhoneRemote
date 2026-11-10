@@ -39,7 +39,7 @@ della prima pubblicazione. I testi delle dipendenze non vanno rietichettati o ri
 python3 Scripts/prepare-source-release.py
 ```
 
-Genera `build/releases/iPhoneRemote-0.5.0-source.zip` e un manifest con hash SHA-256
+Genera `build/releases/iPhoneRemote-0.5.1-source.zip` e un manifest con hash SHA-256
 dei file e dell’archivio. L’esportazione usa esattamente il tree dell’indice Git:
 non include modifiche non staged, cronologia, account o prodotti locali.
 Lo script rifiuta l’esportazione se l’audit fallisce.

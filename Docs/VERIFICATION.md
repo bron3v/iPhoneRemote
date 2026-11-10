@@ -95,3 +95,15 @@ locali non vengono presentati come una CI remota già passata.
 - Non è implementata un’autenticazione Face ID tramite Touch ID Mac: la
   documentazione Apple sul companion riguarda un’integrazione iPhone Mirroring
   delle app coinvolte, distinta dal controllo USB/WDA.
+
+## 0.5.1 — ascolto audio USB
+
+- Build Debug e Release e 19 test RemoteCore superati. Versione personale
+  installata e riaperta.
+- Su iPhone 14 Pro collegato via USB, una prova AVFoundation ha ricevuto
+  campioni audio e fotogrammi video insieme, con l’uscita di anteprima audio
+  attiva. La prova ha contato i campioni senza salvarli né riprodurli.
+- La prova d’uso ha confermato l’ascolto di VoiceOver tramite iPhone Remote e
+  la visibilità del rettangolo di selezione su un tastierino nascosto. Il
+  rettangolo viene disegnato da iOS e le cifre restano nascoste. Non è stata
+  verificata la compatibilità con ogni schermata di autenticazione.

@@ -36,6 +36,8 @@ struct ContentView: View {
     @StateObject private var automation = LocalAutomation()
     @AppStorage("showSettingsSidebar") private var showSidebar = true
     @AppStorage("preferredCaptureSource") private var sourceID = ""
+    @AppStorage("usbAudioEnabled") private var usbAudioEnabled = false
+    @AppStorage("usbAudioVolume") private var usbAudioVolume = 0.6
     @AppStorage("compactWindow") private var compact = false
     @AppStorage("sidebarBeforeCompact") private var sidebarBeforeCompact = true
     @AppStorage("alwaysOnTop") private var onTop = false
@@ -50,6 +52,7 @@ struct ContentView: View {
     @AppStorage("keypadGuideDiameter") private var guideDiameter = 0.18
     @AppStorage("keypadGuideOpacity") private var guideOpacity = 0.8
     @State private var guideVisible = false
+    @State private var audioSettingsVisible = false
     @State private var guideSettingsVisible = false
     @State private var didStartVideo = false
     @State private var launchedAutomation = false
@@ -199,6 +202,22 @@ struct ContentView: View {
         }
         .toolbar {
             ToolbarItemGroup(placement: .primaryAction) {
+                Button { audioSettingsVisible.toggle() } label: {
+                    Image(systemName: capture.audioAvailable && usbAudioEnabled && usbAudioVolume > 0 ? "speaker.wave.2" : "speaker.slash")
+                }
+                .help("Audio USB dell’iPhone")
+                .accessibilityLabel("Audio USB dell’iPhone")
+                .popover(isPresented: $audioSettingsVisible) {
+                    VStack(alignment: .leading, spacing: 10) {
+                        Toggle("Riproduci audio USB sul Mac", isOn: $usbAudioEnabled)
+                        Slider(value: $usbAudioVolume, in: 0...1) { Text("Volume") }
+                            .disabled(!usbAudioEnabled)
+                        Text(capture.audioAvailable
+                             ? "Riproduzione dal vivo. Le registrazioni restano senza audio."
+                             : "Nessuna traccia audio disponibile dalla sorgente video attuale.")
+                            .font(.caption).foregroundStyle(.secondary)
+                    }.padding(14).frame(width: 265)
+                }
                 Button {
                     guideVisible.toggle()
                     guideSettingsVisible = guideVisible
@@ -235,6 +254,7 @@ struct ContentView: View {
             }
         }
         .onAppear {
+            updateAudioPlayback()
             // Explicit launch option for device validation; normal launches stay manual.
             let arguments = ProcessInfo.processInfo.arguments
             if let index = arguments.firstIndex(of: "--capture-source"), arguments.indices.contains(index + 1) {
@@ -284,6 +304,8 @@ struct ContentView: View {
             if !visible { guideSettingsVisible = false }
         }
         .onChange(of: autoReconnect) { _, value in remote.automaticReconnect = value }
+        .onChange(of: usbAudioEnabled) { _, _ in updateAudioPlayback() }
+        .onChange(of: usbAudioVolume) { _, _ in updateAudioPlayback() }
         .onChange(of: compact) { _, value in
             if value { sidebarBeforeCompact = showSidebar; showSidebar = false }
             else { showSidebar = sidebarBeforeCompact }
@@ -297,6 +319,9 @@ struct ContentView: View {
         .onChange(of: sourceID) { _, _ in remote.disableControl() }
         .onReceive(NotificationCenter.default.publisher(for: NSApplication.willTerminateNotification)) { _ in automation.stop() }
         .onDisappear { shortcuts.stop(); capture.stop(); remote.disconnect(); automation.stop() }
+    }
+    private func updateAudioPlayback() {
+        capture.setAudioPlayback(enabled: usbAudioEnabled, volume: usbAudioVolume)
     }
     private func preparePersonalLaunch() {
         guard automation.isConfigured else { return }

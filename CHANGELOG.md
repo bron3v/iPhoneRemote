@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.5.1
+
+- Riproduzione facoltativa dell’audio della sorgente USB sul Mac, con volume nella
+  barra degli strumenti. Le registrazioni restano senza audio.
+- Guida a VoiceOver per display guasti: il rettangolo di selezione di iOS può
+  restare visibile nel video USB anche quando le cifre del tastierino sono nascoste.
+
 ## 0.5.0
 
 - Pillole sottili traslucide sopra orario e indicatori di rete/batteria.
